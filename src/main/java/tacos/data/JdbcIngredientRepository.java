@@ -27,7 +27,6 @@ public class JdbcIngredientRepository implements IngredientRepository {
 		return jdbcTemplate.query("select id, name, type from Ingredient", this::mapRowToIngredient);
 	}
 
-	@Override
 	public Optional<Ingredient> findById(String id) {
 	  List<Ingredient> results = jdbcTemplate.query(
 	      "select id, name, type from Ingredient where id=?",
@@ -37,10 +36,13 @@ public class JdbcIngredientRepository implements IngredientRepository {
 	          Optional.empty() :
 	          Optional.of(results.get(0));
 	}
-
-	private Ingredient mapRowToIngredient(ResultSet row, int rowNum) throws SQLException {
-		return new Ingredient(row.getString("id"), row.getString("name"),
-				Ingredient.Type.valueOf(row.getString("type")));
+	
+	private Ingredient mapRowToIngredient(ResultSet row, int rowNum)
+	    throws SQLException {
+	  return new Ingredient(
+	      row.getString("id"),
+	      row.getString("name"),
+	      Ingredient.Type.valueOf(row.getString("type")));
 	}
 
 	@Override
