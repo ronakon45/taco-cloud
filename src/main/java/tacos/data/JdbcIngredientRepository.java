@@ -28,14 +28,14 @@ public class JdbcIngredientRepository implements IngredientRepository {
 	}
 
 	@Override
-	public Ingredient findById(String id) {
-		return jdbcTemplate.queryForObject("select id, name, type from Ingredient where id=?",
-				new RowMapper<Ingredient>() {
-					public Ingredient mapRow(ResultSet rs, int rowNum) throws SQLException {
-						return new Ingredient(rs.getString("id"), rs.getString("name"),
-								Ingredient.Type.valueOf(rs.getString("type")));
-					};
-				}, id);
+	public Optional<Ingredient> findById(String id) {
+	  List<Ingredient> results = jdbcTemplate.query(
+	      "select id, name, type from Ingredient where id=?",
+	      this::mapRowToIngredient,
+	      id);
+	  return results.size() == 0 ?
+	          Optional.empty() :
+	          Optional.of(results.get(0));
 	}
 
 	private Ingredient mapRowToIngredient(ResultSet row, int rowNum) throws SQLException {
@@ -48,6 +48,60 @@ public class JdbcIngredientRepository implements IngredientRepository {
 		jdbcTemplate.update("insert into Ingredient (id, name, type) values (?, ?, ?)", ingredient.getId(),
 				ingredient.getName(), ingredient.getType().toString());
 		return ingredient;
+	}
+
+	@Override
+	public <S extends Ingredient> Iterable<S> saveAll(Iterable<S> entities) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean existsById(String id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Iterable<Ingredient> findAllById(Iterable<String> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void deleteById(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Ingredient entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAllById(Iterable<? extends String> ids) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll(Iterable<? extends Ingredient> entities) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
