@@ -20,7 +20,7 @@ import tacos.Taco;
 import tacos.TacoOrder;
 
 @Repository
-public class JdbcOrderRepository implements OrderRepository {
+public abstract class JdbcOrderRepository implements OrderRepository {
 
 	private JdbcOperations jdbcOperations;
 
